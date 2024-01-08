@@ -56,9 +56,9 @@ public class IconSwapper : MonoBehaviour
         //Deðiþimi yapmadan önce deðiþim sonunda patlama olacak mý onun bilgisini saklýyoruz. Undo yapýlmýþ bir Swap yapýrsak her türlü true olmalý yoksa geriye doðru gitmeye baþlýyoruz.
         bool isValidSwap = IsValidSwap(icon1, icon2) || isUndoSwap;
 
-        foreach (GameObject child in horizontalParentObjectList)
+        foreach (GameObject pObject in horizontalParentObjectList)
         {
-            child.transform.GetChild(0).gameObject.GetComponent<HorizontalLayoutGroup>().enabled = false;
+            pObject.GetComponent<HorizontalLayoutGroup>().enabled = false;
         }
 
         #region SwapHorizontalElements
@@ -83,9 +83,9 @@ public class IconSwapper : MonoBehaviour
         icon1HorizontalElement.transform.SetSiblingIndex(childIndexOfIcon2);
         #endregion
 
-        foreach (GameObject child in horizontalParentObjectList)
+        foreach (GameObject pObject in horizontalParentObjectList)
         {
-            child.transform.GetChild(0).gameObject.GetComponent<HorizontalLayoutGroup>().enabled = true;
+            pObject.GetComponent<HorizontalLayoutGroup>().enabled = true;
         }
 
         icon1.gameObject.GetComponent<RectTransform>().anchoredPosition = icon1AnchoredPos;
