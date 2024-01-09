@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class InputManager : MonoBehaviour
+public class InputManager : Singleton<InputManager>
 {
     IconSwapper iconSwapper;
     HistoryUIHandler historyUIHandler;
@@ -14,6 +14,8 @@ public class InputManager : MonoBehaviour
     IconSwappable secondSelectedIcon;
 
     [SerializeField] private GameObject parentObject;
+
+    bool isPlayerTurn;
 
     private void Start()
     {
@@ -36,25 +38,28 @@ public class InputManager : MonoBehaviour
     private void OnButtonClick(GameObject clickedObject)
     {
         //Debug.LogWarning("Clicked Object" + clickedObject.name + " / " + clickedObject.GetInstanceID());
+        if (isPlayerTurn)
+        {
+            if (firstSelectedIcon == null)
+            {
+                firstSelectedIcon = clickedObject.GetComponent<IconSwappable>();
+                firstSelectedIcon.ToggleSelection();
+            }
+            else if (secondSelectedIcon == null && clickedObject.GetComponent<IconSwappable>() != firstSelectedIcon)
+            {
+                secondSelectedIcon = clickedObject.GetComponent<IconSwappable>();
+                SwapIconCommand(historyUIHandler, iconSwapper, firstSelectedIcon, secondSelectedIcon);
+                firstSelectedIcon.ToggleSelection();
+                firstSelectedIcon = null; secondSelectedIcon = null;
+            }
+            else if (clickedObject.GetComponent<IconSwappable>() == firstSelectedIcon)
+            {
+                firstSelectedIcon = clickedObject.GetComponent<IconSwappable>();
+                firstSelectedIcon.ToggleSelection();
+                firstSelectedIcon = null;
+            }
+        }
         
-        if (firstSelectedIcon == null)
-        {
-            firstSelectedIcon = clickedObject.GetComponent<IconSwappable>();
-            firstSelectedIcon.ToggleSelection();
-        }
-        else if(secondSelectedIcon == null && clickedObject.GetComponent<IconSwappable>() != firstSelectedIcon)
-        {
-            secondSelectedIcon = clickedObject.GetComponent<IconSwappable>();
-            SwapIconCommand(historyUIHandler,iconSwapper, firstSelectedIcon,secondSelectedIcon);
-            firstSelectedIcon.ToggleSelection();
-            firstSelectedIcon = null; secondSelectedIcon = null;
-        }
-        else if(clickedObject.GetComponent<IconSwappable>() == firstSelectedIcon)
-        {
-            firstSelectedIcon = clickedObject.GetComponent<IconSwappable>();
-            firstSelectedIcon.ToggleSelection();
-            firstSelectedIcon = null;
-        }
     }
 
     private void SwapIconCommand(HistoryUIHandler historyUIHandler, IconSwapper iconSwapper, IconSwappable iconSwappable1, IconSwappable iconSwappable2)
@@ -65,9 +70,15 @@ public class InputManager : MonoBehaviour
             return;
         }
 
+        GameManager.Instance.gameStateManager.SwitchState(GameManager.Instance.gameStateManager.TransitionState);
         ICommand command = new SwapCommand(historyUIHandler, iconSwapper, iconSwappable1, iconSwappable2);
         CommandInvoker.ExecuteCommand(command);
         
         
+    }
+
+    public void SetIsPlayerTurn(bool isPlayerTurn)
+    {
+        this.isPlayerTurn = isPlayerTurn;
     }
 }
