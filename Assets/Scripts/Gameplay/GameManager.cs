@@ -8,12 +8,15 @@ public class GameManager : Singleton<GameManager>
     [SerializeField] private List<IconSwappable> iconElementsList;
     [SerializeField] private List<IconSwappableSO> iconElementsSoList;
 
+    public GameStateManager gameStateManager;
+
     private void Start()
     {
-        SetupBoard();
+        gameStateManager = GetComponent<GameStateManager>();
+        gameStateManager.SwitchState(gameStateManager.BoardSetupState);
     }
 
-    private void SetupBoard()
+    public void SetupBoard()
     {
         Init();
         FillElementData();
@@ -51,6 +54,8 @@ public class GameManager : Singleton<GameManager>
 
     public void StartGameValidationProcess()
     {
+        gameStateManager.SwitchState(gameStateManager.TransitionState);
+
         //Find Successful Icons
         SuccessValidationHandler successValidationHandler = new(GetIconElementsList());
         List<IconSwappable> successfulIcons = successValidationHandler.FindSuccessfulElements();
@@ -63,7 +68,7 @@ public class GameManager : Singleton<GameManager>
         }
         else
         {
-            BurdanDevam();
+            ValidationCompleted();
         }
         
     }
@@ -74,9 +79,10 @@ public class GameManager : Singleton<GameManager>
         //Debug.LogWarning("OnRespawnCompleted");
     }
 
-    private void BurdanDevam()
+    private void ValidationCompleted()
     {
-        Debug.LogWarning("Buradan Devam'a geldi");
+        Debug.LogWarning("Validation Completed");
+        gameStateManager.SwitchState(gameStateManager.PlayerTurnState);
     }
 
     
