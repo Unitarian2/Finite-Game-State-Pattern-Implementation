@@ -6,14 +6,15 @@ NOT: Bu repo'daki proje daha önce geliştirilmiş olan MatchingGameViaCommandPa
 MatchingGameViaCommandPattern repo : https://github.com/Unitarian2/MatchingGameViaCommandPattern <br><br>
 
 ---GameState Classes---<br>
-GameBaseState.cs => Oluşturulacak her state'in miras alacağı Base class. Kullanacağı GameStateManager her method'da parametre olarak verilerek kullanılır.<br>
-GameBoardSetupState.cs => Concrete GameState sınıfı. Masanın kurulum aşamasında olduğu state'dir. Masa kurulumu yapılır.
-GamePlayerTurnState.cs => Oyuncunun oynama sırasının geldiği state'dir. Oyuncu kontrolleri aktifleştirilir.
-GameTransitionState.cs => Oyuncu swap command'ini verdikten sonra oyunun swap işlemi, başarılı eşleşmeleri patlatması ve yeni ikonlar spawn etmesi gibi işlemleri gerçekleştirdiği, oyuncunun kontrollerinin deaktif olduğu state'dir.
+<b>GameBaseState.cs =></b> Oluşturulacak her state'in miras alacağı Base class. Kullanacağı GameStateManager her method'da parametre olarak verilerek kullanılır.<br>
+<b>GameBoardSetupState.cs =></b> Concrete GameState sınıfı. Masanın kurulum aşamasında olduğu state'dir. Masa kurulumu yapılır.<br>
+<b>GamePlayerTurnState.cs =></b> Oyuncunun oynama sırasının geldiği state'dir. Oyuncu kontrolleri aktifleştirilir.<br>
+<b>GameTransitionState.cs =></b> Oyuncu swap command'ini verdikten sonra oyunun swap işlemi, başarılı eşleşmeleri patlatması ve yeni ikonlar spawn etmesi gibi işlemleri gerçekleştirdiği, oyuncunun kontrollerinin deaktif olduğu state'dir.<br><br>
 
 <b>GameManager.cs'daki değişimler</b><br>
-- ValidationCompleted methodu eklendi. Bu method oyun TransitionState'deki tüm işlemleri gerçekleştirdikten sonra oyuncuya kontrollerini tekrar vermek adına oyun state'ini GamePlayerTurnState'e geçirir.
-- Start methodu içerisinde artık BoardSetupState'e geçiyoruz ve masanın kurulumu işlemini başlatıyoruz.
+- ValidationCompleted methodu eklendi. Bu method oyun TransitionState'deki tüm işlemleri gerçekleştirdikten sonra oyuncuya kontrollerini tekrar vermek adına oyun state'ini GamePlayerTurnState'e geçirir.<br>
+- Start methodu içerisinde artık BoardSetupState'e geçiyoruz ve masanın kurulumu işlemini başlatıyoruz.<br>
+- StartGameValidationProcess methodu artık her çağırıldığında ilk olarak GameTransitionState'e geçiyoruz ki oyuncu kontrolleri artık kapansın.<br>
 
 
 
