@@ -11,5 +11,9 @@ GameBoardSetupState.cs => Concrete GameState sınıfı. Masanın kurulum aşamas
 GamePlayerTurnState.cs => Oyuncunun oynama sırasının geldiği state'dir. Oyuncu kontrolleri aktifleştirilir.
 GameTransitionState.cs => Oyuncu swap command'ini verdikten sonra oyunun swap işlemi, başarılı eşleşmeleri patlatması ve yeni ikonlar spawn etmesi gibi işlemleri gerçekleştirdiği, oyuncunun kontrollerinin deaktif olduğu state'dir.
 
+<b>GameManager.cs'daki değişimler</b><br>
+- ValidationCompleted methodu eklendi. Bu method oyun TransitionState'deki tüm işlemleri gerçekleştirdikten sonra oyuncuya kontrollerini tekrar vermek adına oyun state'ini GamePlayerTurnState'e geçirir.
+- Start methodu içerisinde artık BoardSetupState'e geçiyoruz ve masanın kurulumu işlemini başlatıyoruz.
+
 
 
